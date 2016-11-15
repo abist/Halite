@@ -24,7 +24,7 @@ def move(x,y):
             surrounded = False
             break
 
-    if (surrounded):
+    if (surrounded and site.strength > 0):
         return Move(location, NORTH if random.random() > 0.5 else WEST)
 
     if site.strength < site.production * 5:
