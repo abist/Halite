@@ -1,1 +1,3 @@
 # Halite
+
+Halite AI Challenge
