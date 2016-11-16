@@ -2,49 +2,16 @@ from hlt import *
 from networking import *
 
 myID, gameMap = getInit()
-sendInit("PythonBot")
+sendInit("MyBot")
 
-
-def getNeighbours():
-    neighbours = []
-    for d in CARDINALS:
-        for i in range(-1,2,1):
-            for j in range(-1,2,1):
-                neighbours.append(gameMap.getSite(Location(i,j), d))
-    return neighbours
-
-
-def getSurroundingStrength():
-    neighbours = getNeighbours()
-    strengthSum = 0
-    for neighbour in neighbours:
-        strengthSum += neighbour.strength
-    return strengthSum
-
-def surroundMove(site):
-    neighbours = getNeighbours()
-    surrounded = True
-    for neighbour in neighbours:
-        if (neighbour.owner != myID):
-            surrounded = False
-            break
-    if (surrounded and site.strength > 0):
-        return Move(location, NORTH if random.random() > 0.5 else WEST)
-
-
-def move(x,y):
-    location = Location(x, y)
+def move(location):
     site = gameMap.getSite(location)
     for d in CARDINALS:
         neighbour_site = gameMap.getSite(location, d)
-        if neighbour_site.owner != myID and neighbour_site.strength < site.strength :
+        if neighbour_site.owner != myID and neighbour_site.strength < site.strength:
             return Move(location, d)
-    surroundMove(site)
-
     if site.strength < site.production * 5:
-       return Move(location, STILL)
-
-
+        return Move(location, STILL)
     return Move(location, NORTH if random.random() > 0.5 else WEST)
 
 while True:
@@ -54,5 +21,5 @@ while True:
         for x in range(gameMap.width):
             location = Location(x, y)
             if gameMap.getSite(location).owner == myID:
-                moves.append(move(x,y))
+                moves.append(move(location))
     sendFrame(moves)
